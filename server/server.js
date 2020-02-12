@@ -15,11 +15,6 @@ app.use(express.static(publicPath));
 // IO = esta es la comunicacion del backend
 module.exports.io = socketIO(server);
 require('./sockets/socket');
-
-
-
-
-
 server.listen(port, (err) => {
 
     if (err) throw new Error(err);

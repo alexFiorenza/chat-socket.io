@@ -14,7 +14,7 @@ socket.on('disconnect', function() {
 
 // Enviar información
 socket.emit('enviarMensaje', {
-    usuario: 'Fernando',
+    usuario: 'Alex',
     mensaje: 'Hola Mundo'
 }, function(resp) {
     console.log('respuesta server: ', resp);
