@@ -5,25 +5,32 @@ const {createMessage}=require("../utils/utils")
 
 io.on('connection', (client) => {
     client.on("enterChat",(user,cb)=>{
-        if(!user.name){
+        if(!user.name||!user.room){
             return cb({
                 error:true,
-                message:"Name is necessary"
+                message:"Name/room is necessary"
             })
         }
-        let people=users.addPerson(client.id,user.name)
-        client.broadcast.emit("peopleList",users.getPeople());
-        cb(people)
+        client.join(user.room)
+        users.addPerson(client.id,user.name,user.room)
+        client.broadcast.to(user.room).emit("peopleList",users.getPeopleByRoom(user.room));
+        cb(users.getPeopleByRoom(user.room)) //Returns all the users in a room
     })
     client.on("disconnect",()=>{
         let deletedPerson=users.deletePerson(client.id)
-        client.broadcast.emit("createMessage",createMessage("Admin",`${deletedPerson.name} left`))
-        client.broadcast.emit("peopleList",users.getPeople());
+        client.broadcast.to(deletedPerson.room).emit("createMessage",createMessage("Admin",`${deletedPerson.name} left`))
+        client.broadcast.to(deletedPerson.room).emit("peopleList",users.getPeopleByRoom(deletedPerson.room));
     })
     client.on("sendMessage",(data) => {
         let person=users.getPerson(client.id)
 
         let message=createMessage(person.name,data.message)
-        client.broadcast.emit("sendMessage",message)
+        client.broadcast.to(person.room).emit("sendMessage",message)
+    })
+
+    //Private messages
+    client.on("privateMessage",(data) => {
+        let person=users.getPerson(client.id)
+        client.broadcast.to(data.to).emit("privateMessage",createMessage(person.name,data.message))
     })
 });

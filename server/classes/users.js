@@ -2,9 +2,9 @@ class Users{
     constructor(){
         this.people=[];
     }
-    addPerson(id,name){
+    addPerson(id,name,room){
         let person={
-            id,name
+            id,name,room
         }
         this.people.push(person); 
         return this.people;
@@ -18,8 +18,11 @@ class Users{
     getPeople(){
         return this.people;
     }
-    getPeopleByRoom(){
-        //TODO
+    getPeopleByRoom(room){
+        let peopleInRoom=this.people.filter((p)=>{
+            return p.room===room
+        })
+        return peopleInRoom
     }
     deletePerson(id){
         let deletedPerson=this.getPerson(id)
