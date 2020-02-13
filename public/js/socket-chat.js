@@ -14,15 +14,12 @@ var user = {
 
 socket.on('connect', function () {
     socket.emit("enterChat", user, function (resp) {
-        console.log(resp)
+        renderizeUsers(resp)
     })
 });
-
-socket.on("sendMessage", function (message) {
-    console.log(message)
-})
 socket.on("createMessage",function(response){
-    console.log(response);
+    renderizeMessages(response,false)
+    scrollBottom
 })
 
 socket.on('disconnect', function () {
@@ -30,7 +27,7 @@ socket.on('disconnect', function () {
 });
 
 socket.on("peopleList", function (people) {
-    console.log(people)
+    renderizeUsers(people)
 })
 //Private Messages | Listen from server
 socket.on("privateMessage",function(message){
