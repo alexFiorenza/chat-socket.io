@@ -10,7 +10,9 @@ class Users{
         return this.people;
     }
     getPerson(id){
-        let person=this.people.filter((p)=>{p.id===id})[0];
+        let person=this.people.filter((p)=>{
+            return p.id===id
+        })[0];
         return person;
     }
     getPeople(){
